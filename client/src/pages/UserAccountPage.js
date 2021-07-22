@@ -48,8 +48,6 @@ export const UserAccountPage = () => {
         }
     }, [auth, message, clearError, request, account])
 
-
-
     const deleteUser = useCallback( async () => {
         if (window.confirm('Are you sure you wish to delete your account?')) {
             try {

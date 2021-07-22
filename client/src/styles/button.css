@@ -2,7 +2,8 @@
 
 .button {
     border: 1px solid black;
-    width: 200px;
+    width: 40vw;
+    max-width: 200px;
     height: 40px;
     cursor: pointer;
 }
