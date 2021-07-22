@@ -47,7 +47,7 @@ export const AuthPage = () => {
             <h1 className='center-text'>Login or Create an Account</h1>
 
 
-            <div className='auth-form p10'>
+            <div className='p10'>
                 <div className='item p10'>
 
                     <h3>Registered Customers</h3>

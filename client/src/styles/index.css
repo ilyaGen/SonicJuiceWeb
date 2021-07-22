@@ -87,15 +87,8 @@ a {
   max-width: 800px;
 }
 
-
-.auth-form {
-  display: flex!important;
-  align-items: top!important;
-  text-align: justify;
-}
-
 .item {
-  max-width: 350px;
+  max-width: 550px;
 }
 
 .bottom-item {
