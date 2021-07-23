@@ -46,7 +46,6 @@ volumes:
         device: "${CERTBOT_WWW_PATH}"
         o: bind
 
-
 networks: 
     ltsnet:
         driver: bridge
