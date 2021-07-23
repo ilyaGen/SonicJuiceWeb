@@ -42,9 +42,9 @@ volumes:
     web-root:
         driver: local
         driver_opts:
-        type: none
-        device: "${CERTBOT_WWW_PATH}"
-        o: bind
+            type: none
+            device: "${CERTBOT_WWW_PATH}"
+            o: bind
 
 networks: 
     ltsnet:
