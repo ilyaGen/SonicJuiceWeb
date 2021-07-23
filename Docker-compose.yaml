@@ -8,122 +8,34 @@ services:
         image: nginx
         restart: unless-stopped
         volumes:
-            - ${NGINX_TEMPLATES_PATH}:/etc/nginx/templates
-            - ${API_DATA_PATH}:/data
-            - web-root:/var/www/html
-            - certbot-etc:/etc/letsencrypt
-            - certbot-var:/var/lib/letsencrypt
-            - dhparam:/etc/ssl/certs
+            - ngnix-config:/etc/nginx/templates
         ports:
             - "80:80"
-            - "443:443"
         networks: 
             ltsnet:
-                ipv4_address: "${NGINX_HOST}"
-    certbot:
-        image: certbot/certbot
-        container_name: certbot
-        volumes:
-            - certbot-etc:/etc/letsencrypt
-            - certbot-var:/var/lib/letsencrypt
-            - web-root:/var/www/html
-        depends_on:
-            - nginx
-        command: certonly --webroot --webroot-path=/var/www/html --email ilya.ambrazhevich@gmail.com --agree-tos --no-eff-email --force-renewal -d lead-tosuccess.com -d www.lead-tosuccess.com
-    ltsreact:
-        environment:
-            - DOCKER_ENTRY_HOST
-        build: lts_react_client/
-        restart: always
-        networks: 
-            ltsnet:
-                ipv4_address: "${REACT_HOST}"
+                ipv4_address: "192.168.240.2"
 
-    ltsapi:
-        build: LTSNodeServerAPI/
-        volumes:
-            - ltsdata:/usr/src/app/uploads
+    sjnode:
+        build: ./
         restart: always
         environment:
-            - MONGODB_ADMINUSERNAME
-            - MONGODB_ADMINPASSWORD
-        depends_on:
-            - mongo
+            ENVIRONMENT: production
         networks: 
             ltsnet:
-                ipv4_address: "${API_HOST}"
-        
-    mongo:
-        image: mongo
-        restart: always
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: ${MONGODB_ADMINUSERNAME}
-            MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ADMINPASSWORD}
-        volumes:
-            - ltsmongodb:/data/db
-        ports:
-            - "27017:27017"
-        networks: 
-            ltsnet:
-                ipv4_address: "${MONGO_HOST}"
-    
-    pdfgenerator:
-        build: PDFGenerator/
-        restart: always
-        networks: 
-            ltsnet:
-                ipv4_address: "${PDFGEN_HOST}"
-
+                ipv4_address: "192.168.240.3"
 
 volumes:
-    ltsmongodb:
+    ngnix-config:
         driver: local
         driver_opts:
             type: 'none'
             o: 'bind'
-            device: "${API_DB_PATH}"
-    ltsdata:
-        driver: local
-        driver_opts:
-            type: 'none'
-            o: 'bind'
-            device: "${API_DATA_PATH}"
-    ltsapisrc:
-        driver: local
-        driver_opts:
-            type: 'none'
-            o: 'bind'
-            device: "${API_SRC_PATH}"
-    reactsrc:
-        driver: local
-        driver_opts:
-            type: 'none'
-            o: 'bind'
-            device: "${REACT_SRC_PATH}"
-    ltspdfgensrc:
-        driver: local
-        driver_opts:
-            type: 'none'
-            o: 'bind'
-            device: "${PDFGEN_SRC_PATH}"
-    certbot-etc:
-    certbot-var:
-    web-root:
-        driver: local
-        driver_opts:
-            type: none
-            device: "${CERTBOT_WWW_PATH}"
-            o: bind
-    dhparam:
-        driver: local
-        driver_opts:
-            type: none
-            device: "${DHPARAM_PATH}"
-            o: bind
+            device: "${NGINX_TEMPLATES_PATH}"
+
 
 networks: 
     ltsnet:
         driver: bridge
         ipam:
             config:
-                - subnet: "${SUBNET}"
+                - subnet: "192.168.240.0/24"
