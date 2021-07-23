@@ -22,7 +22,7 @@ services:
         environment:
             ENVIRONMENT: production
         networks: 
-            ltsnet
+            - ltsnet
 
     certbot:
         image: certbot/certbot
