@@ -5,9 +5,9 @@ export const PrivacyPolicyPage = () => {
             <div className='info-container'>
                 <h1>Privacy Policy</h1>
                 <h3>Who is the controller?</h3>
-                <span>Sonic Juice Ltd (SonicJuice), org.nr n/a</span>
-                <span>Address: Shpalernaya 60, 202, 191015 St-Petersburg, Russia</span>
-                <span>E-mail: privacy@sonic-juice.com</span>
+                <div>Sonic Juice Ltd (SonicJuice), org.nr n/a</div>
+                <div>Address: Shpalernaya 60, 202, 191015, St-Petersburg, Russia</div>
+                <div>E-mail: support@sonic-juice.com</div>
                 
                 <h3>The Purposes and Legal Basis for our Processing of Personal Data</h3>
                 <h4>Performance of Purchase Agreement</h4>
