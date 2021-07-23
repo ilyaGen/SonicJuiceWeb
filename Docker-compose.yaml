@@ -2,18 +2,19 @@ version: "3"
 
 services:
     nginx:
-        environment:
-            - API_HOST
-            - REACT_HOST
         image: nginx
-        restart: unless-stopped
-        volumes:
-            - ngnix-config:/etc/nginx/templates
+        restart: unless-stopped  
         ports:
             - "80:80"
+        volumes:
+            - web-root:/var/www/html
+            - ./nginx-conf:/etc/nginx/conf.d
+            - certbot-etc:/etc/letsencrypt
+            - certbot-var:/var/lib/letsencrypt
+            depends_on:
+            - sjnode
         networks: 
-            ltsnet:
-                ipv4_address: "192.168.240.2"
+            - ltsnet
 
     sjnode:
         build: ./
@@ -24,18 +25,28 @@ services:
             ltsnet:
                 ipv4_address: "192.168.240.3"
 
+    certbot:
+        image: certbot/certbot
+        container_name: certbot
+        volumes:
+            - certbot-etc:/etc/letsencrypt
+            - certbot-var:/var/lib/letsencrypt
+            - web-root:/var/www/html
+        depends_on:
+            - nginx
+        command: certonly --webroot --webroot-path=/var/www/html --email ilya.ambrazhevich@gmail.com --agree-tos --no-eff-email --staging -d sonic-juice.com  -d www.sonic-juice.com
+
 volumes:
-    ngnix-config:
+    certbot-etc:
+    certbot-var:
+    web-root:
         driver: local
         driver_opts:
-            type: 'none'
-            o: 'bind'
-            device: "${NGINX_TEMPLATES_PATH}"
+        type: none
+        device: "${CERTBOT_WWW_PATH}"
+        o: bind
 
 
 networks: 
     ltsnet:
         driver: bridge
-        ipam:
-            config:
-                - subnet: "192.168.240.0/24"
